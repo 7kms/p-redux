@@ -1,21 +1,16 @@
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from './actions'
+import React from 'react'
+import { render } from 'react-dom'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import App from './containers/App'
+import todoApp from './reducers'
 
-// 打印初始状态
-console.log(store.getState())
+let store = createStore(todoApp)
 
-// 每次 state 更新时，打印日志
-// 注意 subscribe() 返回一个函数用来注销监听器
-let unsubscribe = store.subscribe(() =>
-    console.log(store.getState())
+let rootElement = document.getElementById('root')
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  rootElement
 )
-
-// 发起一系列 action
-store.dispatch(addTodo('Learn about actions'))
-store.dispatch(addTodo('Learn about reducers'))
-store.dispatch(addTodo('Learn about store'))
-store.dispatch(completeTodo(0))
-store.dispatch(completeTodo(1))
-store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED))
-
-// 停止监听 state 更新
-unsubscribe();
