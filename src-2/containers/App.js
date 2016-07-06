@@ -1,37 +1,61 @@
-import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
+import React, {Component,PropTypes} from 'react';
+import { connect } from 'react-redux';
 import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from '../actions'
-import AddTodo from '../components/AddTodo'
-import TodoList from '../components/TodoList'
-import Footer from '../components/Footer'
+import AddTodo from '../components/AddTodo.js';
+import TodoList from '../components/TodoList.js';
+import Filter from '../components/Filter.js';
 
-class App extends Component {
+
+
+
+class App extends Component{
   constructor(props){
     super(props);
   }
-  render() {
-    // Injected by connect() call:
-    const { dispatch, visibleTodos, visibilityFilter } = this.props
-    return (
+
+  // static propTypes = {
+  //   visibleTodos: PropTypes.arrayOf(PropTypes.shape({
+  //     text: PropTypes.string.isRequired,
+  //     completed: PropTypes.bool.isRequired
+  //   }).isRequired).isRequired,
+  //   visibilityFilter: PropTypes.oneOf([
+  //     'SHOW_ALL',
+  //     'SHOW_COMPLETED',
+  //     'SHOW_ACTIVE'
+  //   ]).isRequired
+  // };
+
+  render(){
+    //由connect()函数注入
+    const {dispatch, visibleTodos, visibilityFilter} = this.props;
+    return(
       <div>
         <AddTodo
-          onAddClick={text =>
-            dispatch(addTodo(text))
-          } />
+          onAddClick={text=>{
+            dispatch(addTodo(text));
+          }}
+        />
         <TodoList
           todos={visibleTodos}
-          onTodoClick={index =>
-            dispatch(completeTodo(index))
-          } />
-        <Footer
-          filter={visibilityFilter}
-          onFilterChange={nextFilter =>
-            dispatch(setVisibilityFilter(nextFilter))
-          } />
+          onTodoClick={
+            index=>{
+              dispatch(completeTodo(index));
+            }
+          }
+        />
+        <Filter
+          onFilterChange = {
+            filter =>{
+              dispatch(setVisibilityFilter(filter));
+            }
+          }
+          filter = {visibilityFilter}
+        />
       </div>
-    )
+    );
   }
 }
+
 
 App.propTypes = {
   visibleTodos: PropTypes.arrayOf(PropTypes.shape({
@@ -44,6 +68,7 @@ App.propTypes = {
     'SHOW_ACTIVE'
   ]).isRequired
 }
+
 
 function selectTodos(todos, filter) {
   switch (filter) {
